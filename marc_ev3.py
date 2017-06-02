@@ -1,9 +1,31 @@
 #!/usr/bin/env python3
 from ev3dev.ev3 import *
+from globals import *
 
 FEET_PER_SECOND = 4
 
 
+def turn(degrees):
+    """
+    @param degrees: int, positive number turns right, negative turns left
+    
+    Turns right or left the specified degrees, updates the global DIRECTION
+    """
+    global DIRECTION
+    
+    DIRECTION += degrees
+    LEFT_MOTOR.run_rotations(ROTATIONS_PER_DEGREE * degrees)
+    LEFT_MOTOR.run_rotations(ROTATIONS_PER_DEGREE * degrees)
+    
+    
+def move_north(centimeters):
+    global X_POSITION
+    global Y_POSITION
+    X_POSITION += centimeters
+    LEFT_MOTOR.run_rotations(ROTATIONS_PER_CM * centimeters)
+    LEFT_MOTOR.run_rotations(ROTATIONS_PER_CM * centimeters)
+    
+    
 def msecs_for_feet(feet):
     return int(feet * FEET_PER_SECOND * 1000)
 
@@ -16,8 +38,6 @@ def wait(motor):
 def main():
     Sound.speak('Here we go!').wait()
 
-    left_motor = LargeMotor(OUTPUT_A)
-    right_motor = LargeMotor(OUTPUT_B)
     motor_max_speed = left_motor.max_speed
     speed = 80
 
