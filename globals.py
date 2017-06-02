@@ -1,0 +1,5 @@
+X_POSITION = 0
+Y_POSITION = 0
+
+RED_DESK = tuple(30, 20)
+BLUE_DESK = tuple(30, -20)
