@@ -1,10 +1,22 @@
+from math import pi
+from ev3dev.ev3 import (
+    LargeMotor,
+    OUTPUT_C,
+    OUTPUT_B,
+    OUTPUT_A,
+    MediumMotor,
+)
+
+
 X_POSITION = 0
 Y_POSITION = 0
 
-RED_DESK = tuple(30, 20)
-BLUE_DESK = tuple(30, -20)
+RED_DESK = tuple([30, 20])
+BLUE_DESK = tuple([30, -20])
 
-ROTATIONS_PER_CM = .7
+WHEEL_DIAMETER = 5.6  # centimeters
+WHEEL_CIRCUMFERENCE = pi * WHEEL_DIAMETER
+ROTATIONS_PER_CM = 1 / WHEEL_CIRCUMFERENCE
 ROTATIONS_PER_DEGREE = .5  # how many rotations to turn specified degrees
 """
            0
@@ -15,5 +27,16 @@ ROTATIONS_PER_DEGREE = .5  # how many rotations to turn specified degrees
 """
 DIRECTION = 0 
 
-LEFT_MOTOR = LargeMotor(OUTPUT_A)
-RIGHT_MOTOR = LargeMotor(OUTPUT_B)
+LEFT_MOTOR = LargeMotor(OUTPUT_B)
+RIGHT_MOTOR = LargeMotor(OUTPUT_C)
+MEDIUM_MOTOR = MediumMotor(OUTPUT_A)
+
+def main ():
+    print(
+        "wheel circumferentce {}\n".format(WHEEL_CIRCUMFERENCE),
+        "wheel rotations/cm {}\n".format(ROTATIONS_PER_CM),
+        "wheel rotations/deg {}\n".format(ROTATIONS_PER_DEGREE),
+    )
+
+if __name__ == "__main__":
+    main()
