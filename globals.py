@@ -17,6 +17,7 @@ BLUE_DESK = tuple([30, -20])
 WHEEL_DIAMETER = 5.6  # centimeters
 WHEEL_CIRCUMFERENCE = pi * WHEEL_DIAMETER
 ROTATIONS_PER_CM = 1 / WHEEL_CIRCUMFERENCE
+# TODO ROTATIONS_PER_DEGREE needs a real number, .5 is just a wild guess
 ROTATIONS_PER_DEGREE = .5  # how many rotations to turn specified degrees
 """
            0
@@ -33,7 +34,7 @@ MEDIUM_MOTOR = MediumMotor(OUTPUT_A)
 
 def main ():
     print(
-        "wheel circumferentce {}\n".format(WHEEL_CIRCUMFERENCE),
+        " wheel circumference {}\n".format(WHEEL_CIRCUMFERENCE),
         "wheel rotations/cm {}\n".format(ROTATIONS_PER_CM),
         "wheel rotations/deg {}\n".format(ROTATIONS_PER_DEGREE),
     )
