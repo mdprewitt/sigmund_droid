@@ -32,7 +32,8 @@ LEFT_MOTOR = LargeMotor(OUTPUT_B)
 RIGHT_MOTOR = LargeMotor(OUTPUT_C)
 MEDIUM_MOTOR = MediumMotor(OUTPUT_A)
 
-def main ():
+
+def main():
     print(
         " wheel circumference {}\n".format(WHEEL_CIRCUMFERENCE),
         "wheel rotations/cm {}\n".format(ROTATIONS_PER_CM),
