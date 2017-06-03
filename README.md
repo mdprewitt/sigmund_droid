@@ -6,7 +6,10 @@ Lego EV3 Programs
 - For line navigation, need to calibrate RLI to room light
 - Ideas for lines: electrician's tape, colored duct tape
 
+# Code Notes
 
+- `globals` module holds location location and constants for navigating
+- `navigation` module contains simple methods to move/turn
 # In Action
 
 - Navigation: https://www.flickr.com/gp/marcprewitt/79bh3v
