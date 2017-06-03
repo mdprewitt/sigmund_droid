@@ -4,6 +4,7 @@ Lego EV3 Programs
 # Notes
 
 - For line navigation, need to calibrate RLI to room light
+- Consider using the Rotation Sensor to understand current location
 - Ideas for lines: electrician's tape, colored duct tape
 
 # Code Notes
