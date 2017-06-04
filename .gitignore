@@ -52,3 +52,6 @@ cmake-build-debug/
 
 ## File-based project format:
 *.iws
+
+# directory db
+/directory_app/directory.db
