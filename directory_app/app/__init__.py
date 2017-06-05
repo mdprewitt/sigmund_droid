@@ -7,4 +7,4 @@ app.config['SECRET_KEY'] = '123456790'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 
-from app import views, models, admin
+from app import views, models, admin, restless
