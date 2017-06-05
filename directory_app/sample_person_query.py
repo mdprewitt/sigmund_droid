@@ -8,7 +8,7 @@ headers = {'Content-Type': 'application/json'}
 filters = [dict(
     name='sid',
     op='==',
-    val='m123456'
+    val='a123456'
 )]
 params = dict(q=json.dumps(dict(filters=filters, single=True)))
 
