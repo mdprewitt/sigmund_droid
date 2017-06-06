@@ -18,7 +18,41 @@ Lego EV3 Programs
     - access admin via (http://127.0.0.1:5000/admin)
     - access apis via (http://127.0.0.1:5000/api/person)
     - search for person with: (http://127.0.0.1:5000/api/person?q={"filters":[{"name":"sid","op":"==","val":"a123456"}],"single":"true"}) or `sample_person_query.py`
+   
+- Using the [law of sines](https://www.mathsisfun.com/algebra/trig-sine-law.html), we can find our x, y coordinates if we know the direction we are heading
+  and the distance we have travelled.  
+ 
+        .
+        .       \
+        .       |\       
+        .       |X\      
+        .       |  \ z
+        .     y |   \    
+        .       |    \   
+        .       |     \  
+        .       |Z    Y\ 
+        .       ---------
+        .           x
+
+Known values:
+
+    - z=10cm (distance we travelled)
+    - Y=60 degrees (angle we tavelled)
+    - Z=90 degrees
     
+Calculated:
+
+    - X = 180 - (Y + Z) = 30 degrees
+    
+    - x/sin(X) = z/sin(Z)
+    - x = sin(X) * z/sin(Z)
+    - x = sin(30) * 10 / sin(90)
+    - x = .5 * 10 / 1 = 5 cm
+    
+    - y/sin(Y) = z/sin(Z)
+    - y = sin(Y) * z/sin(Z)
+    - y = .87 * 10 / 1 = 8.7 cm
+  
 # In Action
 
 - Navigation: https://www.flickr.com/gp/marcprewitt/79bh3v
