@@ -14,9 +14,9 @@ Y_POSITION = 0
 RED_DESK = tuple([30, 20])
 BLUE_DESK = tuple([30, -20])
 
-WHEEL_DIAMETER = 5.6  # centimeters
+WHEEL_DIAMETER = 4.3  # centimeters
 WHEEL_CIRCUMFERENCE = pi * WHEEL_DIAMETER
-ROTATIONS_PER_CM = 1 / WHEEL_CIRCUMFERENCE
+ROTATIONS_PER_CM = 360 * WHEEL_CIRCUMFERENCE
 # TODO ROTATIONS_PER_DEGREE needs a real number, .5 is just a wild guess
 ROTATIONS_PER_DEGREE = .5  # how many rotations to turn specified degrees
 """

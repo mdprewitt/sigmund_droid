@@ -5,6 +5,7 @@ from time import sleep
 from PIL import Image
 import ev3dev.ev3 as ev3
 
+from globals import *
 
 
 #connect infrared and check it's connected.
@@ -25,7 +26,7 @@ if distance < 500:
  logo = Image.open('chase.png')
  lcd.image.paste(logo, (0,0))
  lcd.update()
- ev3.Sound.speak('Welcome to JP Morgan Chase, who are you looking for?').wait()
+ ev3.Sound.speak('Welcome to JP Morgan Chase. Who are you looking for?').wait()
 
 else:
  Leds.all_off()
@@ -37,8 +38,10 @@ lm = LargeMotor('outB')
 rm = LargeMotor ('outC')
 
 #go straight for 3 feet (in degrees)
-lm.run_to_rel_pos(position_sp=-1871.1164566700884, speed_sp=900, stop_action="brake")
-rm.run_to_rel_pos(position_sp=-1871.1164566700884, speed_sp=900, stop_action="brake")
+drive = 75 / WHEEL_CIRCUMFERENCE * 360
+print("going {} rotations".format(drive))
+lm.run_to_rel_pos(position_sp=drive, speed_sp=695, stop_action="brake")
+rm.run_to_rel_pos(position_sp=drive, speed_sp=700, stop_action="brake")
 lm.wait_while('running')
 rm.wait_while('running')
 
@@ -46,13 +49,13 @@ rm.wait_while('running')
 #Sound.beep()
 
 #turn right
-lm.run_to_rel_pos(position_sp=300, speed_sp=360, stop_action="brake")
-rm.run_to_rel_pos(position_sp=-300, speed_sp=360, stop_action="brake")
+lm.run_to_rel_pos(position_sp=305, speed_sp=360, stop_action="brake")
+rm.run_to_rel_pos(position_sp=-305, speed_sp=360, stop_action="brake")
 
 
 #go straight 2 feet (in degrees)
 lm.wait_while('running')
 rm.wait_while('running')
-lm.run_to_rel_pos(position_sp=-1247.4109711133922, speed_sp=900, stop_action="brake")
-rm.run_to_rel_pos(position_sp=-1247.4109711133922, speed_sp=900, stop_action="brake")
+lm.run_to_rel_pos(position_sp=1247.4109711133922, speed_sp=900, stop_action="brake")
+rm.run_to_rel_pos(position_sp=1247.4109711133922, speed_sp=900, stop_action="brake")
 
