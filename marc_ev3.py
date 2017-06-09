@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 from ev3dev.ev3 import *
-from globals import *
-from navigation import *
 
 FEET_PER_SECOND = 4
 
@@ -18,26 +16,31 @@ def wait(motor):
 def main():
     Sound.speak('Here we go!').wait()
 
-    motor_max_speed = LEFT_MOTOR.max_speed
+    left_motor = LargeMotor(OUTPUT_B)
+    right_motor = LargeMotor(OUTPUT_C)
+    motor_max_speed = left_motor.max_speed
     speed = 80
 
     # full steam ahead!
-    LEFT_MOTOR.run_timed(speed_sp=motor_max_speed * speed, time_sp=msecs_for_feet(3))
-    RIGHT_MOTOR.run_timed(speed_sp=motor_max_speed * speed, time_sp=msecs_for_feet(3))
+    left_motor.run_timed(speed_sp=500, time_sp=3000)
+    right_motor.run_timed(speed_sp=500, time_sp=3000)
 
-    wait(LEFT_MOTOR)
+    left_motor.run_timed(speed_sp=motor_max_speed * speed, time_sp=msecs_for_feet(3))
+    right_motor.run_timed(speed_sp=motor_max_speed * speed, time_sp=msecs_for_feet(3))
+
+    wait(left_motor)
 
     # turn right
-    LEFT_MOTOR.run_timed(speed_sp=motor_max_speed * speed, time_sp=msecs_for_feet(.5))
-    RIGHT_MOTOR.run_timed(speed_sp=-motor_max_speed * speed, time_sp=msecs_for_feet(.5))
+    left_motor.run_timed(speed_sp=motor_max_speed * speed, time_sp=msecs_for_feet(.5))
+    right_motor.run_timed(speed_sp=-motor_max_speed * speed, time_sp=msecs_for_feet(.5))
 
-    wait(LEFT_MOTOR)
+    wait(left_motor)
 
     # resume speed
-    LEFT_MOTOR.run_timed(speed_sp=motor_max_speed * speed, time_sp=msecs_for_feet(2))
-    RIGHT_MOTOR.run_timed(speed_sp=motor_max_speed * speed, time_sp=msecs_for_feet(2))
+    left_motor.run_timed(speed_sp=motor_max_speed * speed, time_sp=msecs_for_feet(2))
+    right_motor.run_timed(speed_sp=motor_max_speed * speed, time_sp=msecs_for_feet(2))
 
-    wait(LEFT_MOTOR)
+    wait(left_motor)
 
 if __name__ == '__main__':
     main()

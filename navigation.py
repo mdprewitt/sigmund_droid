@@ -4,12 +4,10 @@ from globals import *
 def initialize(direction=0, x_position=0, y_position=0, motor_normal_polarity=True):
     """
     Setup the robot defaults/location/etc...
-
     :param direction: int, 0 by default
     :param x_position: int, 0 by default
     :param y_position: int, 0 by default
     :param motor_normal_polarity: bool, True for 'normal polarity, otherwise motors are 'inversed'
-
     :return:
     """
     motor_polarity = 'normal' if motor_normal_polarity else 'inversed'
@@ -24,10 +22,14 @@ def initialize(direction=0, x_position=0, y_position=0, motor_normal_polarity=Tr
     Y_POSITION = y_position
 
 
+def stop():
+    LEFT_MOTOR.stop()
+    RIGHT_MOTOR.stop()
+    
+
 def turn(degrees):
     """
     @param degrees: int, positive number turns right, negative turns left
-
     Turns right or left the specified degrees, updates the global DIRECTION
     """
     global DIRECTION
