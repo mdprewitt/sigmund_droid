@@ -17,3 +17,7 @@ assert response.status_code == 200
 pp = pprint.PrettyPrinter(indent=4)
 
 pp.pprint(response.json())
+
+def get_desk_xy(sid): # color number 1-7
+    # do the requests.get for a person, get their desk xy
+    return (location_x, location_y)
