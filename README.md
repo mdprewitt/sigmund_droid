@@ -13,7 +13,8 @@ Lego EV3 Programs
 - `navigation` module contains simple methods to move/turn'
 - 'directory_app' module is a flask app to maintain Locations, Desks, People
     - install all required modules with `pip install -r requirements.txt`
-    - initialize database with `db_upgrade.py`
+    - create database with `db_create.py`
+    - initialize our tables with `db_upgrade.py`
     - create sample data with: `setup_sample_data.py`
     - start server with `run.py`
     - access admin via (http://127.0.0.1:5000/admin)
