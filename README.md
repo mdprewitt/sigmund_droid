@@ -19,6 +19,21 @@ Lego EV3 Programs
     - access admin via (http://127.0.0.1:5000/admin)
     - access apis via (http://127.0.0.1:5000/api/person)
     - search for person with: (http://127.0.0.1:5000/api/person?q={"filters":[{"name":"sid","op":"==","val":"a123456"}],"single":"true"}) or `sample_person_query.py`
+- Setup your own git repo on the brick:
+    - create an sshkey on the brick: `ssh-keygen` save it to ~/.ssh/id_rsa.{your_name}
+    - add a host alias to the ~/.ssh/config file for your new ssh key:
+    ```
+        host {name}_github
+            HostName github.com
+            IdentityFile ~/.ssh/id_rsa.{name}
+    ```
+    - clone the repo using your host alias
+    `git clone git@{name}_github:mdprewitt/sigmund_droid.git`
+    - set your name/email for git:
+    ```
+    git config user.email "you@example.com"
+    git config user.name "Your Name"
+    ```
    
 - Using the [law of sines](https://www.mathsisfun.com/algebra/trig-sine-law.html), we can find our x, y coordinates if we know the direction we are heading
   and the distance we have travelled.  
