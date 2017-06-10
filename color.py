@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from ev3dev.ev3 import *
-import test
+import sigmund_demo
 
 locations = {'green': (1,3), 'blue': (5, 3), 'yellow': (1, 1), 'brown': (1, 5)}
 
