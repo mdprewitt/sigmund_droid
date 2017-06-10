@@ -1,4 +1,6 @@
 from globals import *
+import logging
+LOGGER = logging.getLogger(__name__)
 
 
 def initialize(direction=0, x_position=0, y_position=0, motor_normal_polarity=True):
@@ -36,12 +38,30 @@ def turn(degrees):
 
     DIRECTION += degrees
     LEFT_MOTOR.run_rotations(ROTATIONS_PER_DEGREE * degrees)
-    LEFT_MOTOR.run_rotations(ROTATIONS_PER_DEGREE * degrees)
+    RIGHT_MOTOR.run_rotations(ROTATIONS_PER_DEGREE * degrees)
+
+
+def turn_right():
+    LEFT_MOTOR.run_to_rel_pos(position_sp=305, speed_sp=360, stop_action="brake")
+    RIGHT_MOTOR.run_to_rel_pos(position_sp=-305, speed_sp=360, stop_action="brake")
+
+
+def turn_left():
+    LEFT_MOTOR.run_to_rel_pos(position_sp=-305, speed_sp=360, stop_action="brake")
+    RIGHT_MOTOR.run_to_rel_pos(position_sp=305, speed_sp=360, stop_action="brake")
+
+
+def move(centimeters, speed=700, stop_action="brake"):
+    rotations = centimeters / WHEEL_CIRCUMFERENCE * 360
+    LOGGER.debug("Running %d rotations at %d then %s", rotations, speed, stop_action)
+    LEFT_MOTOR.run_to_rel_pos(position_sp=rotations, speed_sp=int(speed*.993), stop_action=stop_action)
+    RIGHT_MOTOR.run_to_rel_pos(position_sp=rotations, speed_sp=speed, stop_action=stop_action)
 
 
 def move_north(centimeters):
     global X_POSITION
     global Y_POSITION
     X_POSITION += centimeters
-    LEFT_MOTOR.run_rotations(ROTATIONS_PER_CM * centimeters)
-    LEFT_MOTOR.run_rotations(ROTATIONS_PER_CM * centimeters)
+    rotations = centimeters / WHEEL_CIRCUMFERENCE * 360
+    LEFT_MOTOR.run_rotations(centimeters)
+    RIGHT_MOTOR.run_rotations(centimeters)
