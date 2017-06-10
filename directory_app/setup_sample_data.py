@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from app import app, db
 from app.models import Person, Desk, Location
 import sqlalchemy.exc
