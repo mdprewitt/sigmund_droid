@@ -1,8 +1,15 @@
+#!/usr/bin/env python3
 import requests
 import json
 import pprint
+import argparse
 
-url = 'http://127.0.0.1:5000/api/person'
+parser = argparse.ArgumentParser(description='Get a person from the directory.')
+parser.add_argument('--url', default='http://127.0.0.1:5000')
+args = parser.parse_args()
+
+
+url = args.url + '/api/person'
 headers = {'Content-Type': 'application/json'}
 
 filters = [dict(
@@ -12,6 +19,7 @@ filters = [dict(
 )]
 params = dict(q=json.dumps(dict(filters=filters, single=True)))
 
+print("Making request [{}] params=[{}]".format(url, params))
 response = requests.get(url, params=params, headers=headers)
 assert response.status_code == 200
 pp = pprint.PrettyPrinter(indent=4)
