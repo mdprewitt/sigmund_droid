@@ -1,17 +1,54 @@
 #!/usr/bin/env python3
 
 from ev3dev.ev3 import *
-import sigmund_demo
+import ev3dev.ev3 as ev3
+from time import sleep
+from PIL import Image
 
-locations = {'green': (1,3), 'blue': (5, 3), 'yellow': (1, 1), 'brown': (1, 5)}
+import requests
+import json
 
-cl = ColorSensor()
-assert cl.connected
 
-cl.mode='COL-COLOR'
+def setup_color_sensor():
 
-colors=('unknown','black','blue','green','yellow','red','white','brown')
+    #connect color sensor and check it's connected.
+    cl = ColorSensor()
+    assert cl.connected
 
-while cl.value() == 5:
-    if cl.value() == 2:
-        Leds.set_color(Leds.RIGHT, (Leds.AMBER))
+    #put the color sensor into color mode
+    cl.mode= 'COL-COLOR'
+
+    return cl
+
+
+def get_color():
+    """
+    gets numerical color value from color sensor
+    sends value to directory api to retrieve person details
+    :return: set of coordinates for desk
+    """
+
+    cl = setup_color_sensor()
+
+    ready = True
+
+    while ready:
+
+        dest = cl.value()
+        print("looking for desk #%d", dest)
+
+        url = "http://127.0.0.1:5000/api/person/" + str(dest) # TODO read from config
+
+        try:
+            result = requests.get(url=url)
+            ready = False
+        except:
+            Exception("User does not exist")
+
+    person = json.loads(result.content.decode('utf-8'))
+    coordinates = (person['desk']['location_x'], person['desk']['location_y'])
+
+    message = ("Taking you to %s %s", person['first'], person['last'])
+    speak(message)
+
+    return coordinates
