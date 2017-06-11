@@ -11,7 +11,7 @@ Lego EV3 Programs
 
 - `globals` module holds location location and constants for navigating
 - `navigation` module contains simple methods to move/turn'
-- 'directory_app' module is a flask app to maintain Locations, Desks, People
+- `directory_app` module is a flask app to maintain Locations, Desks, People
     - install all required modules with `pip install -r requirements.txt`
     - create database with `db_create.py`
     - initialize our tables with `db_upgrade.py`
@@ -20,6 +20,9 @@ Lego EV3 Programs
     - access admin via (http://127.0.0.1:5000/admin)
     - access apis via (http://127.0.0.1:5000/api/person)
     - search for person with: (http://127.0.0.1:5000/api/person?q={"filters":[{"name":"sid","op":"==","val":"a123456"}],"single":"true"}) or `sample_person_query.py`
+    - brick/laptop setup you can run the server on your local machine that you're using to ssh to the brick and connect to it from the brick like this:
+        - share your laptop internet connection with the brick [Mac](http://www.ev3dev.org/docs/tutorials/connecting-to-the-internet-via-usb/)
+        `sample_person_query.py --url http://${SSH_IP}/:5000`
 - Setup your own git repo on the brick:
     - create an sshkey on the brick: `ssh-keygen` save it to ~/.ssh/id_rsa.{your_name}
     - add a host alias to the ~/.ssh/config file for your new ssh key:
