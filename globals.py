@@ -32,6 +32,7 @@ LEFT_MOTOR = LargeMotor(OUTPUT_B)
 RIGHT_MOTOR = LargeMotor(OUTPUT_C)
 MEDIUM_MOTOR = MediumMotor(OUTPUT_A)
 
+SILENT = False
 
 def main():
     print(
