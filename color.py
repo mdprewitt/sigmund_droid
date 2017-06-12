@@ -45,10 +45,24 @@ def get_color(url="http://127.0.0.1:5000"):
             dest = cl.value()
             sleep(.1)
 
-        LOGGER.debug("looking for desk #%d", dest)
+        LOGGER.debug("looking for person with sid=%d", dest)
 
         try:
-            result = requests.get(url="{url}/api/person/{dest}".format(url=url, dest=str(dest)))
+            filters = [dict(
+                name='sid',
+                op='==',
+                val=str(dest),
+            )]
+            params = dict(q=json.dumps(dict(filters=filters, single=True)))
+            headers = {'Content-Type': 'application/json'}
+
+            LOGGER.debug("Making request [%s] params=[%s]", url, params)
+
+            result = requests.get(
+                url="{url}/api/person".format(url=url, dest=str(dest)),
+                params=params,
+                header=headers,
+            )
             ready = False
         except:
             raise Exception("User does not exist")

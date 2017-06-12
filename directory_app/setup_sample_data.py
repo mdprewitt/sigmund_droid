@@ -8,37 +8,37 @@ db.create_all()
 person1 = Person(
     first='Joe',
     last='Doe',
-    sid='a123456',
+    sid='1',
 )
 person2 = Person(
     first='Jane',
     last='Smith',
-    sid='b123456',
+    sid='2',
 )
 person3 = Person(
     first='Bob',
     last='Center',
-    sid='c123456',
+    sid='3',
 )
 person4 = Person(
     first='Jose',
     last='Chavez',
-    sid='d123456',
+    sid='4',
 )
 person5 = Person(
     first='Consuela',
     last='Montoya',
-    sid='e123456',
+    sid='5',
 )
 person6 = Person(
     first='Kurt',
     last='Vonnegut',
-    sid='f123456',
+    sid='6',
 )
 person7 = Person(
     first='Jane',
     last='Austin',
-    sid='g123456',
+    sid='7',
 )
 main = Location(
     street_address='123 Main Street',
