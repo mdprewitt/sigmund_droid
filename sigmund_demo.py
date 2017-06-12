@@ -13,6 +13,12 @@ LOGGER = logging.getLogger(__name__)
 
 
 def main(url):
+    stop()
+    initialize()
+    speak('Press the red button to start the demo.')
+
+    wait_for_touch_sensor()
+
     while True:
         try:
             stop()
@@ -32,6 +38,17 @@ def main(url):
 
             LOGGER.info("Reached destination")
             stop()
+            speak('Press the red button to return home.')
+            wait_for_touch_sensor()
+            turn_left()
+            turn_left()
+
+            moved_right = smart_move(y_target)
+            if x_target > 0:
+                turn_right()
+            else:
+                turn_left()
+            smart_move(abs(x_target + moved_right))
 
         except ButtonAbort:
             LOGGER.info("Abort button activated, returning to start")

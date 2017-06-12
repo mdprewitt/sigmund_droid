@@ -86,6 +86,17 @@ def sleep(seconds):
         check_abort()
 
 
+def wait_for_touch_sensor():
+    """ wait for the touch sensor to be pressed """
+    while True:
+        if not TOUCH_SENSOR.connected:
+            LOGGER.warning("Touch sensor not conneected")
+            return
+        if TOUCH_SENSOR.value():
+            return
+        time.sleep(.1)
+
+
 @abort_on_button
 def ir_distance():
     """
