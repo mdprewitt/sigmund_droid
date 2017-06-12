@@ -5,6 +5,10 @@ from ev3dev.ev3 import (
     OUTPUT_B,
     OUTPUT_A,
     MediumMotor,
+    TouchSensor,
+    InfraredSensor,
+    Screen,
+    Leds,
 )
 
 
@@ -31,8 +35,13 @@ DIRECTION = 0
 LEFT_MOTOR = LargeMotor(OUTPUT_B)
 RIGHT_MOTOR = LargeMotor(OUTPUT_C)
 MEDIUM_MOTOR = MediumMotor(OUTPUT_A)
+TOUCH_SENSOR = TouchSensor()
+IR_SENSOR = InfraredSensor()
+SCREEN = Screen()
+LEDS = Leds
 
 SILENT = False
+
 
 def main():
     print(

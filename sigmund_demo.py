@@ -1,59 +1,60 @@
 #!/usr/bin/env python3
 
+import os
 import argparse
-from time import sleep
 import logging
 
-from PIL import Image
-import ev3dev.ev3 as ev3
-from globals import *
+import globals
+from globals import LEDS
+from color import get_color as get_target_xy
 from navigation import *
 
 LOGGER = logging.getLogger(__name__)
 
-# connect infrared and check it's connected.
-ir = ev3.InfraredSensor()
-assert ir.connected, "Connect a single infrared sensor to port"
 
-# put the infrared sensor into proximity mode.
-ir.mode = 'IR-PROX'
+def main(url):
+    while True:
+        try:
+            initialize()
 
-def main():
-    initialize()
-    ir_distance = ir.value()
+            if ir_distance() < 500:
+                LEDS.set_color(LEDS.LEFT, LEDS.GREEN)
+                display_image('chase.png')
 
-    if ir_distance < 500:
-        ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)
-        lcd = ev3.Screen()
-        logo = Image.open('chase.png')
-        lcd.image.paste(logo, (0, 0))
-        lcd.update()
+                speak('Welcome to JP Morgan Chase. Who are you looking for?')
 
-        speak('Welcome to JP Morgan Chase. Who are you looking for?')
+            else:
+                LEDS.all_off()
+                sleep(2)
 
-    else:
-        ev3.Leds.all_off()
-        sleep(2)
+            x_target, y_target = get_target_xy(url=url)
+            moved_right = smart_move(x_target)
+            if y_target > 0:
+                turn_right()
+            else:
+                turn_left()
+            smart_move(abs(y_target - moved_right))
 
-    moved_right = smart_move(75)
-    turn_right()
-    smart_move(30 - moved_right)
+            LOGGER.info("Reached destination")
+            stop()
 
-    LOGGER.info("Reached desitnation")
-    stop()
+        except ButtonAbort:
+            LOGGER.info("Abort button activated, returning to start")
+            stop()
+            initialize()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Sigmund Demo.')
-    parser.add_argument('--silent', action='store_true' )
+    parser.add_argument('--silent', action='store_true')
     parser.add_argument('--log_level', default='INFO')
+    parser.add_argument('--url', default='http://{host_ip}:5000'.format(host_ip=os.environ.get('SSH_IP')))
     args = parser.parse_args()
 
-    global SILENT
-    SILENT = args.silent
+    globals.SILENT = args.silent
 
     logging.basicConfig(
-            format='%(asctime)-15s %(message)s',
-            level=args.log_level,
-            )
+        format='%(asctime)-15s %(message)s',
+        level=args.log_level,
+    )
 
-    main()
+    main(args.url)
