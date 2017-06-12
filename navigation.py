@@ -20,9 +20,9 @@ def check_abort():
 def abort_on_button(func):
     """ decorator to check_abort before/after running a function """
 
-    def wrapper():
+    def wrapper(*args, **kwargs):
         check_abort()
-        retval = func()
+        retval = func(*args, **kwargs)
         check_abort()
         return retval
 
