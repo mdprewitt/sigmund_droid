@@ -15,6 +15,7 @@ LOGGER = logging.getLogger(__name__)
 def main(url):
     while True:
         try:
+            stop()
             initialize()
 
             LEDS.set_color(LEDS.LEFT, LEDS.GREEN)
@@ -35,8 +36,6 @@ def main(url):
 
         except ButtonAbort:
             LOGGER.info("Abort button activated, returning to start")
-            stop()
-            initialize()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Sigmund Demo.')
