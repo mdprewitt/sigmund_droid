@@ -17,15 +17,10 @@ def main(url):
         try:
             initialize()
 
-            if ir_distance() < 500:
-                LEDS.set_color(LEDS.LEFT, LEDS.GREEN)
-                display_image('chase.png')
+            LEDS.set_color(LEDS.LEFT, LEDS.GREEN)
+            display_image('chase.png')
 
-                speak('Welcome to JP Morgan Chase. Who are you looking for?')
-
-            else:
-                LEDS.all_off()
-                sleep(2)
+            speak('Welcome to JP Morgan Chase. Who are you looking for?')
 
             x_target, y_target = get_target_xy(url=url)
             moved_right = smart_move(x_target)

@@ -38,6 +38,10 @@ def get_color(url="http://127.0.0.1:5000"):
     while ready:
 
         dest = cl.value()
+        while dest < 1:
+            dest = cl.value()
+            sleep(.1)
+
         print("looking for desk #%d", dest)
 
         try:
