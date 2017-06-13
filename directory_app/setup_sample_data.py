@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from app import app, db
-from app.models import *
+from app.models import Person, Desk, Location
 import sqlalchemy.exc
 
 db.create_all()
@@ -8,14 +8,37 @@ db.create_all()
 person1 = Person(
     first='Joe',
     last='Doe',
-    sid='a123456',
-    color='Red'
+    sid='1',
 )
 person2 = Person(
     first='Jane',
     last='Smith',
-    sid='b123456',
-    color='Red'
+    sid='2',
+)
+person3 = Person(
+    first='Bob',
+    last='Center',
+    sid='3',
+)
+person4 = Person(
+    first='Jose',
+    last='Chavez',
+    sid='4',
+)
+person5 = Person(
+    first='Consuela',
+    last='Montoya',
+    sid='5',
+)
+person6 = Person(
+    first='Kurt',
+    last='Vonnegut',
+    sid='6',
+)
+person7 = Person(
+    first='Jane',
+    last='Austin',
+    sid='7',
 )
 main = Location(
     street_address='123 Main Street',
@@ -40,7 +63,49 @@ desk2 = Desk(
     floor=21,
     person=person2,
 )
-for obj in [main, person1, person2, desk1, desk2]:
+desk3 = Desk(
+    location=main,
+    alias='100W2',
+    location_x=30,
+    location_y=-20,
+    floor=21,
+    person=person3,
+)
+desk4 = Desk(
+    location=main,
+    alias='100W2',
+    location_x=30,
+    location_y=-20,
+    floor=21,
+    person=person4,
+)
+desk5 = Desk(
+    location=main,
+    alias='100W2',
+    location_x=30,
+    location_y=-20,
+    floor=21,
+    person=person5,
+)
+desk6 = Desk(
+    location=main,
+    alias='100W2',
+    location_x=30,
+    location_y=-20,
+    floor=21,
+    person=person6,
+)
+desk7 = Desk(
+    location=main,
+    alias='100W2',
+    location_x=30,
+    location_y=-20,
+    floor=21,
+    person=person7,
+)
+for obj in [main,
+            person1, person2, person3, person4, person5, person6, person7,
+            desk1, desk2, desk3, desk4, desk5, desk6, desk7]:
     try:
         db.session.add(obj)
         db.session.commit()

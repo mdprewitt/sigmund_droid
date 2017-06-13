@@ -1,15 +1,40 @@
-from time import sleep
 import logging
 import atexit
+import time
 from globals import *
 import ev3dev.ev3 as ev3
+from PIL import Image
 
 LOGGER = logging.getLogger(__name__)
 
 
+class ButtonAbort(BaseException):
+    pass
+
+
+def check_abort():
+    if TOUCH_SENSOR.connected and TOUCH_SENSOR.value():
+        LOGGER.debug("Raising button abort")
+        raise ButtonAbort()
+
+
+def abort_on_button(func):
+    """ decorator to check_abort before/after running a function """
+
+    def wrapper(*args, **kwargs):
+        check_abort()
+        retval = func(*args, **kwargs)
+        check_abort()
+        return retval
+
+    return wrapper
+
+
+@abort_on_button
 def initialize(direction=0, x_position=0, y_position=0, motor_normal_polarity=True):
     """
     Setup the robot defaults/location/etc...
+
     :param direction: int, 0 by default
     :param x_position: int, 0 by default
     :param y_position: int, 0 by default
@@ -31,27 +56,94 @@ def initialize(direction=0, x_position=0, y_position=0, motor_normal_polarity=Tr
 
 
 def speak(words):
+    """
+    Speak the test in words
+
+    :param words: str
+    :return:
+    """
     LOGGER.info("Saying: {}".format(words))
     if not SILENT:
         ev3.Sound.speak(words).wait()
 
 
+@abort_on_button
+def display_image(image, x=0, y=0):
+        SCREEN.image.paste(Image.open(image), (x, y))
+        SCREEN.update()
+
+
+def sleep(seconds, check=True):
+    """
+    Sleep the specified seconds checking for abort button periodically
+
+    :param seconds: float
+    :param check: bool, check for abort
+    """
+    if check:
+        end_time = time.time() + seconds
+        while time.time() < end_time:
+            time.sleep(.1)
+            check_abort()
+    else:
+        time.sleep(seconds)
+
+
+def wait_for_touch_sensor():
+    """ wait for the touch sensor to be pressed """
+    while True:
+        if not TOUCH_SENSOR.connected:
+            LOGGER.warning("Touch sensor not conneected")
+            return
+        if TOUCH_SENSOR.value():
+            # wait until the button is no longer depressed
+            while TOUCH_SENSOR.value():
+                time.sleep(.1)
+            return
+        time.sleep(.1)
+
+
+@abort_on_button
+def ir_distance():
+    """
+    Return the distance the IR sensor sees
+
+    :return: float
+    """
+    # connect infrared and check it's connected.
+    assert IR_SENSOR.connected, "Connect a single infrared sensor to port"
+
+    # put the infrared sensor into proximity mode.
+    IR_SENSOR.mode = 'IR-PROX'
+
+    return IR_SENSOR.value()
+
+
 def stop():
+    """ stop all motors """
     LOGGER.debug("stopping")
     LEFT_MOTOR.stop()
     RIGHT_MOTOR.stop()
-    
 
-def start():
+
+@abort_on_button
+def start(speed=700):
+    """
+    Start the left/right motors at the specified speed
+
+    :param speed: int, -1000 <-> 1000
+    """
     LOGGER.debug("stopping")
-    LEFT_MOTOR.run_forever(speed_sp=360)
-    RIGHT_MOTOR.run_forever(speed_sp=360)
-    
+    LEFT_MOTOR.run_forever(speed_sp=speed)
+    RIGHT_MOTOR.run_forever(speed_sp=speed)
 
+
+@abort_on_button
 def turn(degrees):
     """
-    @param degrees: int, positive number turns right, negative turns left
     Turns right or left the specified degrees, updates the global DIRECTION
+
+    :param degrees: int, positive number turns right, negative turns left
     """
     global DIRECTION
 
@@ -60,41 +152,77 @@ def turn(degrees):
     RIGHT_MOTOR.run_rotations(ROTATIONS_PER_DEGREE * degrees)
 
 
+@abort_on_button
+def turn_around():
+    LOGGER.debug("turning around")
+    stop()
+    LEFT_MOTOR.run_to_rel_pos(position_sp=-610, speed_sp=360, stop_action="brake")
+    RIGHT_MOTOR.run_to_rel_pos(position_sp=610, speed_sp=360, stop_action="brake")
+    # TODO change to while not running / check_abort / sleep
+    LEFT_MOTOR.wait_while('running')
+    stop()
+
+
+@abort_on_button
 def turn_right():
     LOGGER.debug("turning right")
     stop()
     LEFT_MOTOR.run_to_rel_pos(position_sp=-305, speed_sp=360, stop_action="brake")
     RIGHT_MOTOR.run_to_rel_pos(position_sp=305, speed_sp=360, stop_action="brake")
+    # TODO change to while not running / check_abort / sleep
     LEFT_MOTOR.wait_while('running')
     stop()
 
 
+@abort_on_button
 def turn_left():
     LOGGER.debug("turning left")
     stop()
     LEFT_MOTOR.run_to_rel_pos(position_sp=305, speed_sp=360, stop_action="brake")
     RIGHT_MOTOR.run_to_rel_pos(position_sp=-305, speed_sp=360, stop_action="brake")
+    # TODO change to while not running / check_abort / sleep
     LEFT_MOTOR.wait_while('running')
     stop()
 
 
+@abort_on_button
+def move(centimeters: float, speed: int = 700, stop_action: str = "brake") -> None:
+    """
+    Move the specified centimeters and wait for the motor to stop
+
+    :param centimeters: float
+    :param speed: int
+    :param stop_action: str
+    :rtype: float
+    """
+    rotations = centimeters / WHEEL_CIRCUMFERENCE * 360
+    LOGGER.debug("Running %d rotations at %d then %s", rotations, speed, stop_action)
+    LEFT_MOTOR.run_to_rel_pos(position_sp=rotations, speed_sp=int(speed * .993), stop_action=stop_action)
+    RIGHT_MOTOR.run_to_rel_pos(position_sp=rotations, speed_sp=speed, stop_action=stop_action)
+    # TODO change to while not running / check_abort / sleep
+    LEFT_MOTOR.wait_while('running')
+
+
+@abort_on_button
 def smart_move(centimeters):
     """
     move specified centimeters avoiding things along the way
 
     returns number of centimeters turned to avoid (+/- for right/left)
+
+    :param centimeters: int, how far to move
+    :return: int
     """
-    ir = ev3.InfraredSensor()
-    assert ir.connected, "Connect a single infrared sensor to port"
     moved_right = 0
+    LOGGER.debug("Moving %d centimeters", centimeters)
     remaining = centimeters
     start_pos = moved()
     start()
     # Run until we've gone how far we want to go or until we hit something
-    done = False
     while remaining > 0:
+        check_abort()
         LOGGER.debug("Remaining %s", remaining)
-        if ir.value() < 20:
+        if ir_distance() < 20:
             LOGGER.info("ran into something at %s", moved())
             stop()
             speak("Pardon me")
@@ -110,23 +238,14 @@ def smart_move(centimeters):
     return moved_right
 
 
-def move(centimeters, speed=700, stop_action="brake"):
-    rotations = centimeters / WHEEL_CIRCUMFERENCE * 360
-    LOGGER.debug("Running %d rotations at %d then %s", rotations, speed, stop_action)
-    LEFT_MOTOR.run_to_rel_pos(position_sp=rotations, speed_sp=int(speed*.993), stop_action=stop_action)
-    RIGHT_MOTOR.run_to_rel_pos(position_sp=rotations, speed_sp=speed, stop_action=stop_action)
-    LEFT_MOTOR.wait_while('running')
-
+@abort_on_button
 def moved():
-    """ returns centimeters moved since last reset """
+    """
+    returns centimeters moved since last reset
+
+    :return: int
+    """
     return LEFT_MOTOR.position / 360 * WHEEL_CIRCUMFERENCE
 
-def move_north(centimeters):
-    global X_POSITION
-    global Y_POSITION
-    X_POSITION += centimeters
-    rotations = centimeters / WHEEL_CIRCUMFERENCE * 360
-    LEFT_MOTOR.run_rotations(centimeters)
-    RIGHT_MOTOR.run_rotations(centimeters)
 
 atexit.register(stop)

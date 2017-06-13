@@ -1,59 +1,87 @@
 #!/usr/bin/env python3
 
+import os
 import argparse
-from time import sleep
 import logging
 
-from PIL import Image
-import ev3dev.ev3 as ev3
-from globals import *
+import globals
+from globals import LEDS
+from color import get_color as get_target_xy
 from navigation import *
 
 LOGGER = logging.getLogger(__name__)
 
-# connect infrared and check it's connected.
-ir = ev3.InfraredSensor()
-assert ir.connected, "Connect a single infrared sensor to port"
 
-# put the infrared sensor into proximity mode.
-ir.mode = 'IR-PROX'
+def main(url):
+    try:
+        stop()
+        initialize()
+        speak('Press the red button to start the demo.')
+    except:
+        pass
 
-def main():
-    initialize()
-    ir_distance = ir.value()
+    wait_for_touch_sensor()
+    sleep(1, check=False)
 
-    if ir_distance < 500:
-        ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)
-        lcd = ev3.Screen()
-        logo = Image.open('chase.png')
-        lcd.image.paste(logo, (0, 0))
-        lcd.update()
+    while True:
+        try:
+            stop()
+            initialize()
 
-        speak('Welcome to JP Morgan Chase. Who are you looking for?')
+            LEDS.set_color(LEDS.LEFT, LEDS.GREEN)
+            speak('Welcome to JP Morgan Chase. Who are you looking for?')
+            display_image('chase.png')
 
-    else:
-        ev3.Leds.all_off()
-        sleep(2)
+            x_target = None
+            while x_target is None:
+                try:
+                    x_target, y_target = get_target_xy(url=url)
+                except (KeyboardInterrupt, SystemExit):
+                    raise
+                except ButtonAbort:
+                    raise
+                except:
+                    pass
 
-    moved_right = smart_move(75)
-    turn_right()
-    smart_move(30 - moved_right)
+            moved_right = smart_move(x_target)
+            if y_target > 0:
+                turn_right()
+            else:
+                turn_left()
+            smart_move(abs(y_target - moved_right))
 
-    LOGGER.info("Reached desitnation")
-    stop()
+            LOGGER.info("Reached destination")
+            stop()
+            speak('Press the red button to return home.')
+            wait_for_touch_sensor()
+            turn_around()
+
+            moved_right = smart_move(abs(y_target))
+            if x_target > 0:
+                turn_right()
+            else:
+                turn_left()
+            smart_move(abs(x_target + moved_right))
+            turn_around()
+
+        except ButtonAbort:
+            LOGGER.info("Abort button activated, returning to start")
+        except (KeyboardInterrupt, SystemExit):
+            LOGGER.exception("exit")
+            raise
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Sigmund Demo.')
-    parser.add_argument('--silent', action='store_true' )
+    parser.add_argument('--silent', action='store_true')
     parser.add_argument('--log_level', default='INFO')
+    parser.add_argument('--url', default='http://{host_ip}:5000'.format(host_ip=os.environ.get('SSH_IP')))
     args = parser.parse_args()
 
-    global SILENT
-    SILENT = args.silent
+    globals.SILENT = args.silent
 
     logging.basicConfig(
-            format='%(asctime)-15s %(message)s',
-            level=args.log_level,
-            )
+        format='%(asctime)-15s %(message)s',
+        level=args.log_level,
+    )
 
-    main()
+    main(args.url)
