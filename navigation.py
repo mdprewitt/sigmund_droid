@@ -14,6 +14,7 @@ class ButtonAbort(BaseException):
 
 def check_abort():
     if TOUCH_SENSOR.connected and TOUCH_SENSOR.value():
+        LOGGER.debug("Raising button abort")
         raise ButtonAbort()
 
 
@@ -54,7 +55,6 @@ def initialize(direction=0, x_position=0, y_position=0, motor_normal_polarity=Tr
     Y_POSITION = y_position
 
 
-@abort_on_button
 def speak(words):
     """
     Speak the test in words
@@ -73,17 +73,20 @@ def display_image(image, x=0, y=0):
         SCREEN.update()
 
 
-@abort_on_button
-def sleep(seconds):
+def sleep(seconds, check=True):
     """
     Sleep the specified seconds checking for abort button periodically
 
     :param seconds: float
+    :param check: bool, check for abort
     """
-    end_time = time.time() + seconds
-    while time.time() < end_time:
-        time.sleep(.1)
-        check_abort()
+    if check:
+        end_time = time.time() + seconds
+        while time.time() < end_time:
+            time.sleep(.1)
+            check_abort()
+    else:
+        time.sleep(seconds)
 
 
 def wait_for_touch_sensor():
@@ -93,6 +96,9 @@ def wait_for_touch_sensor():
             LOGGER.warning("Touch sensor not conneected")
             return
         if TOUCH_SENSOR.value():
+            # wait until the button is no longer depressed
+            while TOUCH_SENSOR.value():
+                time.sleep(.1)
             return
         time.sleep(.1)
 
@@ -147,6 +153,17 @@ def turn(degrees):
 
 
 @abort_on_button
+def turn_around():
+    LOGGER.debug("turning around")
+    stop()
+    LEFT_MOTOR.run_to_rel_pos(position_sp=-610, speed_sp=360, stop_action="brake")
+    RIGHT_MOTOR.run_to_rel_pos(position_sp=610, speed_sp=360, stop_action="brake")
+    # TODO change to while not running / check_abort / sleep
+    LEFT_MOTOR.wait_while('running')
+    stop()
+
+
+@abort_on_button
 def turn_right():
     LOGGER.debug("turning right")
     stop()
@@ -197,6 +214,7 @@ def smart_move(centimeters):
     :return: int
     """
     moved_right = 0
+    LOGGER.debug("Moving %d centimeters", centimeters)
     remaining = centimeters
     start_pos = moved()
     start()

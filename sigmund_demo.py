@@ -13,11 +13,15 @@ LOGGER = logging.getLogger(__name__)
 
 
 def main(url):
-    stop()
-    initialize()
-    speak('Press the red button to start the demo.')
+    try:
+        stop()
+        initialize()
+        speak('Press the red button to start the demo.')
+    except:
+        pass
 
     wait_for_touch_sensor()
+    sleep(1, check=False)
 
     while True:
         try:
@@ -28,7 +32,17 @@ def main(url):
             speak('Welcome to JP Morgan Chase. Who are you looking for?')
             display_image('chase.png')
 
-            x_target, y_target = get_target_xy(url=url)
+            x_target = None
+            while x_target is None:
+                try:
+                    x_target, y_target = get_target_xy(url=url)
+                except (KeyboardInterrupt, SystemExit):
+                    raise
+                except ButtonAbort:
+                    raise
+                except:
+                    pass
+
             moved_right = smart_move(x_target)
             if y_target > 0:
                 turn_right()
@@ -40,18 +54,21 @@ def main(url):
             stop()
             speak('Press the red button to return home.')
             wait_for_touch_sensor()
-            turn_left()
-            turn_left()
+            turn_around()
 
-            moved_right = smart_move(y_target)
+            moved_right = smart_move(abs(y_target))
             if x_target > 0:
                 turn_right()
             else:
                 turn_left()
             smart_move(abs(x_target + moved_right))
+            turn_around()
 
         except ButtonAbort:
             LOGGER.info("Abort button activated, returning to start")
+        except (KeyboardInterrupt, SystemExit):
+            LOGGER.exception("exit")
+            raise
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Sigmund Demo.')
