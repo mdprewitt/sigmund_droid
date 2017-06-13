@@ -71,6 +71,7 @@ def get_color(url="http://127.0.0.1:5000"):
 
     person = json.loads(result.content.decode('utf-8'))
     coordinates = (person['desk']['location_x'], person['desk']['location_y'])
+    LOGGER.debug("Person=%s, x=%s, y=%s", person['first'], coordinates[0], coordinates[1])
 
     message = ("Taking you to {} {}".format(person['first'], person['last']))
     speak(message)
