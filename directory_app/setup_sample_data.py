@@ -65,7 +65,7 @@ desk2 = Desk(
 )
 desk3 = Desk(
     location=main,
-    alias='100W2',
+    alias='100W3',
     location_x=30,
     location_y=-20,
     floor=21,
@@ -73,7 +73,7 @@ desk3 = Desk(
 )
 desk4 = Desk(
     location=main,
-    alias='100W2',
+    alias='100W4',
     location_x=30,
     location_y=-20,
     floor=21,
@@ -81,7 +81,7 @@ desk4 = Desk(
 )
 desk5 = Desk(
     location=main,
-    alias='100W2',
+    alias='100W5',
     location_x=30,
     location_y=-20,
     floor=21,
@@ -89,7 +89,7 @@ desk5 = Desk(
 )
 desk6 = Desk(
     location=main,
-    alias='100W2',
+    alias='100W6',
     location_x=30,
     location_y=-20,
     floor=21,
@@ -97,7 +97,7 @@ desk6 = Desk(
 )
 desk7 = Desk(
     location=main,
-    alias='100W2',
+    alias='100W7',
     location_x=30,
     location_y=-20,
     floor=21,
