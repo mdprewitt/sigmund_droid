@@ -58,9 +58,9 @@ def main(url):
 
             moved_right = smart_move(abs(y_target))
             if x_target > 0:
-                turn_right()
-            else:
                 turn_left()
+            else:
+                turn_right()
             smart_move(abs(x_target + moved_right))
             turn_around()
 
