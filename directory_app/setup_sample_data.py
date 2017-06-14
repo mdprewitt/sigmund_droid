@@ -6,8 +6,8 @@ import sqlalchemy.exc
 db.create_all()
 
 person1 = Person(
-    first='Joe',
-    last='Doe',
+    first='Conference',
+    last='Room A',
     sid='1',
 )
 person2 = Person(
@@ -50,8 +50,8 @@ main = Location(
 desk1 = Desk(
     location=main,
     alias='100W1',
-    location_x=30,
-    location_y=20,
+    location_x=150,
+    location_y=60,
     floor=21,
     person=person1,
 )
@@ -66,7 +66,7 @@ desk2 = Desk(
 desk3 = Desk(
     location=main,
     alias='100W3',
-    location_x=30,
+    location_x=85,
     location_y=-20,
     floor=21,
     person=person3,
@@ -82,8 +82,8 @@ desk4 = Desk(
 desk5 = Desk(
     location=main,
     alias='100W5',
-    location_x=30,
-    location_y=-20,
+    location_x=85,
+    location_y=50,
     floor=21,
     person=person5,
 )
