@@ -41,6 +41,9 @@ def get_color(url="http://127.0.0.1:5000"):
         color = cl.value()
         sleep(.1)
 
+    # change the sensor mode which makes it emit a red light so we know it's read something
+    cl.mode= 'COL-REFLECT'
+
     LOGGER.debug("looking for person with sid=%d", color)
 
     try:
