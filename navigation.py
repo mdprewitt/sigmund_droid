@@ -6,6 +6,7 @@ import ev3dev.ev3 as ev3
 from PIL import Image
 
 LOGGER = logging.getLogger(__name__)
+SP_FOR_90_DEG_TURN = 305
 
 
 class ButtonAbort(BaseException):
@@ -156,8 +157,8 @@ def turn(degrees):
 def turn_around():
     LOGGER.debug("turning around")
     stop()
-    LEFT_MOTOR.run_to_rel_pos(position_sp=-610, speed_sp=360, stop_action="brake")
-    RIGHT_MOTOR.run_to_rel_pos(position_sp=610, speed_sp=360, stop_action="brake")
+    LEFT_MOTOR.run_to_rel_pos(position_sp=-SP_FOR_90_DEG_TURN*2, speed_sp=360, stop_action="brake")
+    RIGHT_MOTOR.run_to_rel_pos(position_sp=SP_FOR_90_DEG_TURN*2, speed_sp=360, stop_action="brake")
     # TODO change to while not running / check_abort / sleep
     LEFT_MOTOR.wait_while('running')
     stop()
@@ -167,8 +168,8 @@ def turn_around():
 def turn_right():
     LOGGER.debug("turning right")
     stop()
-    LEFT_MOTOR.run_to_rel_pos(position_sp=-305, speed_sp=360, stop_action="brake")
-    RIGHT_MOTOR.run_to_rel_pos(position_sp=305, speed_sp=360, stop_action="brake")
+    LEFT_MOTOR.run_to_rel_pos(position_sp=-SP_FOR_90_DEG_TURN, speed_sp=360, stop_action="brake")
+    RIGHT_MOTOR.run_to_rel_pos(position_sp=SP_FOR_90_DEG_TURN, speed_sp=360, stop_action="brake")
     # TODO change to while not running / check_abort / sleep
     LEFT_MOTOR.wait_while('running')
     stop()
@@ -178,8 +179,8 @@ def turn_right():
 def turn_left():
     LOGGER.debug("turning left")
     stop()
-    LEFT_MOTOR.run_to_rel_pos(position_sp=305, speed_sp=360, stop_action="brake")
-    RIGHT_MOTOR.run_to_rel_pos(position_sp=-305, speed_sp=360, stop_action="brake")
+    LEFT_MOTOR.run_to_rel_pos(position_sp=SP_FOR_90_DEG_TURN, speed_sp=360, stop_action="brake")
+    RIGHT_MOTOR.run_to_rel_pos(position_sp=-SP_FOR_90_DEG_TURN, speed_sp=360, stop_action="brake")
     # TODO change to while not running / check_abort / sleep
     LEFT_MOTOR.wait_while('running')
     stop()

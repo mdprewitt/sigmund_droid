@@ -28,6 +28,7 @@ class Person(db.Model):
     last = db.Column(db.String(120))
     first = db.Column(db.String(120))
     desk = db.relationship('Desk', uselist=False, back_populates='person')
+    color = db.Column(db.String(120))
 
     def __repr__(self):
         return '<Person %r>' % self.sid
