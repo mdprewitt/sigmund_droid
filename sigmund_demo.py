@@ -44,10 +44,13 @@ def main(url):
                     pass
 
             moved_right = smart_move(x_target)
+            y_adjust = 0
             if y_target > 0:
                 turn_right()
+                y_adjust = 1
             else:
                 turn_left()
+                y_adjust = -1
             smart_move(abs(y_target - moved_right))
 
             LOGGER.info("Reached destination")
@@ -56,7 +59,7 @@ def main(url):
             wait_for_touch_sensor()
             turn_around()
 
-            moved_right = smart_move(abs(y_target))
+            moved_right = smart_move(abs(y_target) - y_adjust * 10)
             if y_target > 0:
                 turn_left()
             else:

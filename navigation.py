@@ -231,11 +231,10 @@ def smart_move(centimeters):
             turn_left()
             start_pos = moved()
             start()
-        sleep(0.01)
         current_pos = moved()
         remaining -= current_pos - start_pos
         start_pos = current_pos
-        LOGGER.debug("Remaining %s", remaining)
+    LOGGER.debug("Remaining %s", remaining)
     return moved_right
 
 
