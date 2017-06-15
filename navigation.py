@@ -221,11 +221,9 @@ def smart_move(centimeters):
     start()
     # Run until we've gone how far we want to go or until we hit something
     while remaining > 0:
-        check_abort()
-        LOGGER.debug("Remaining %s", remaining)
         if ir_distance() < 20:
-            LOGGER.info("ran into something at %s", moved())
             stop()
+            LOGGER.info("ran into something at %s", moved())
             speak("Pardon me")
             turn_right()
             move(15)
@@ -234,8 +232,11 @@ def smart_move(centimeters):
             start_pos = moved()
             start()
         sleep(0.01)
-        remaining -= moved() - start_pos
-        start_pos = moved()
+        check_abort()
+        current_pos = moved()
+        remaining -= current_pos - start_pos
+        start_pos = current_pos
+        LOGGER.debug("Remaining %s", remaining)
     return moved_right
 
 
