@@ -232,7 +232,6 @@ def smart_move(centimeters):
             start_pos = moved()
             start()
         sleep(0.01)
-        check_abort()
         current_pos = moved()
         remaining -= current_pos - start_pos
         start_pos = current_pos
