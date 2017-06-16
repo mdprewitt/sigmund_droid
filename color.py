@@ -12,14 +12,13 @@ import json
 
 LOGGER = logging.getLogger(__name__)
 
-def setup_color_sensor():
+def setup_color_sensor(mode='COL-REFLECT'):
 
     #connect color sensor and check it's connected.
     cl = ColorSensor()
     assert cl.connected
 
-    #put the color sensor into color mode
-    cl.mode= 'COL-COLOR'
+    cl.mode = mode
 
     return cl
 
@@ -33,7 +32,7 @@ def get_color(url="http://127.0.0.1:5000"):
     :return: set of coordinates for desk
     """
 
-    cl = setup_color_sensor()
+    cl = setup_color_sensor('COL-COLOR')
 
     color = cl.value()
     while color < 1:

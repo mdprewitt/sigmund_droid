@@ -6,7 +6,7 @@ import ev3dev.ev3 as ev3
 from PIL import Image
 
 LOGGER = logging.getLogger(__name__)
-SP_FOR_90_DEG_TURN = 305
+SP_FOR_90_DEG_TURN = 280
 
 
 class ButtonAbort(BaseException):
@@ -134,7 +134,7 @@ def start(speed=700):
 
     :param speed: int, -1000 <-> 1000
     """
-    LOGGER.debug("stopping")
+    LOGGER.debug("starting speed %d", speed)
     LEFT_MOTOR.run_forever(speed_sp=speed)
     RIGHT_MOTOR.run_forever(speed_sp=speed)
 
@@ -234,6 +234,9 @@ def smart_move(centimeters):
         current_pos = moved()
         remaining -= current_pos - start_pos
         start_pos = current_pos
+        if remaining < 10:
+            # slow down as we approach the destination so we don't overshoot
+            start(speed=int(LEFT_MOTOR.speed_sp * .5) + 10)
     LOGGER.debug("Remaining %s", remaining)
     return moved_right
 

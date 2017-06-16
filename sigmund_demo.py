@@ -6,7 +6,7 @@ import logging
 
 import globals
 from globals import LEDS
-from color import get_color as get_target_xy
+from color import get_color as get_target_xy, setup_color_sensor
 from navigation import *
 
 LOGGER = logging.getLogger(__name__)
@@ -25,6 +25,7 @@ def main(url):
 
     while True:
         try:
+            setup_color_sensor()
             stop()
             initialize()
 
@@ -59,7 +60,7 @@ def main(url):
             wait_for_touch_sensor()
             turn_around()
 
-            moved_right = smart_move(abs(y_target) - y_adjust * 10)
+            moved_right = smart_move(abs(y_target) - y_adjust * 1)
             if y_target > 0:
                 turn_left()
             else:
