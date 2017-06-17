@@ -4,6 +4,7 @@ from app import db
 class Location(db.Model):
     __tablename__ = 'location'
     id = db.Column(db.Integer, primary_key=True)
+    alias = db.Column(db.String(8), unique=True)
     street_address = db.Column(db.String(120))
     city = db.Column(db.String(120))
     state = db.Column(db.String(120))
@@ -38,7 +39,7 @@ class Desk(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     location_id = db.Column(db.Integer, db.ForeignKey('location.id'))
     location = db.relationship('Location', back_populates='desks')
-    alias = db.Column(db.String(20))
+    alias = db.Column(db.String(20), unique=True)
     person_id = db.Column(db.Integer, db.ForeignKey('person.id'))
     person = db.relationship('Person', back_populates='desk')
     floor = db.Column(db.String(20))
