@@ -6,7 +6,7 @@ import ev3dev.ev3 as ev3
 from PIL import Image
 
 LOGGER = logging.getLogger(__name__)
-SP_FOR_90_DEG_TURN = 280
+SP_FOR_90_DEG_TURN = 299
 
 
 class ButtonAbort(BaseException):
