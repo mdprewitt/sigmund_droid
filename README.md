@@ -1,4 +1,6 @@
 # sigmund_droid
+
+![sigmund](sigmund.jpg)
 Lego EV3 Programs
 
 # Notes
