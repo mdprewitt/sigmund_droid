@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
 import os
+import sys
 import argparse
 import logging
 
+sys.path.insert(0, 'directory_app')
 import globals
 from globals import LEDS
 from color import get_color as get_target_xy, setup_color_sensor
@@ -12,7 +14,7 @@ from navigation import *
 LOGGER = logging.getLogger(__name__)
 
 
-def main(url):
+def main(url, fake_data):
     try:
         stop()
         initialize()
@@ -36,7 +38,7 @@ def main(url):
             x_target = None
             while x_target is None:
                 try:
-                    x_target, y_target = get_target_xy(url=url)
+                    x_target, y_target = get_target_xy(url=url, fake_data=fake_data)
                 except (KeyboardInterrupt, SystemExit):
                     raise
                 except ButtonAbort:
@@ -77,6 +79,7 @@ def main(url):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Sigmund Demo.')
     parser.add_argument('--silent', action='store_true')
+    parser.add_argument('--fake_data', action='store_true')
     parser.add_argument('--log_level', default='INFO')
     parser.add_argument('--url', default='http://{host_ip}:5000'.format(host_ip=os.environ.get('SSH_IP')))
     args = parser.parse_args()
@@ -88,4 +91,4 @@ if __name__ == "__main__":
         level=args.log_level,
     )
 
-    main(args.url)
+    main(args.url, args.fake_data)

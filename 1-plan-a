@@ -1,0 +1,3 @@
+#!/bin/bash
+
+./sigmund_demo.py --fake_data

@@ -2,6 +2,7 @@
 
 from ev3dev.ev3 import *
 from navigation import speak, abort_on_button, sleep
+from setup_sample_data import people
 import ev3dev.ev3 as ev3
 from PIL import Image
 import logging
@@ -24,7 +25,7 @@ def setup_color_sensor(mode='COL-REFLECT'):
 
 
 @abort_on_button
-def get_color(url="http://127.0.0.1:5000"):
+def get_color(url="http://127.0.0.1:5000", fake_data=False):
     """
     gets numerical color value from color sensor
     sends value to directory api to retrieve person details
@@ -45,37 +46,44 @@ def get_color(url="http://127.0.0.1:5000"):
 
     LOGGER.debug("looking for person with sid=%d", color)
 
-    try:
-        filters = [dict(
-            name='sid',
-            op='==',
-            val=str(color),
-        )]
-        params = dict(q=json.dumps(dict(filters=filters, single=True)))
-        headers = {'Content-Type': 'application/json'}
+    if fake_data:
+        person = people['sid']
+        person_name = '{} {}'.format(person['first'], person['last'])
+        coordinates = (person['location_x'], person['location_y'])
+    else:
+        try:
+            filters = [dict(
+                name='sid',
+                op='==',
+                val=str(color),
+            )]
+            params = dict(q=json.dumps(dict(filters=filters, single=True)))
+            headers = {'Content-Type': 'application/json'}
 
-        LOGGER.debug("Making request [%s] params=[%s]", url, params)
+            LOGGER.debug("Making request [%s] params=[%s]", url, params)
 
-        result = requests.get(
-            url="{url}/api/person".format(url=url),
-            params=params,
-            headers=headers,
-        )
-        if result.status_code == 404:
-            LOGGER.error("Person [%s] not found", color)
-            raise Exception
-        elif result.status_code != 200:
-            LOGGER.error("Query error %s - %s", result.status_code, result.reason)
-            raise Exception
-    except:
-        LOGGER.exception("Exception making request")
-        raise
+            result = requests.get(
+                url="{url}/api/person".format(url=url),
+                params=params,
+                headers=headers,
+            )
+            if result.status_code == 404:
+                LOGGER.error("Person [%s] not found", color)
+                raise Exception
+            elif result.status_code != 200:
+                LOGGER.error("Query error %s - %s", result.status_code, result.reason)
+                raise Exception
+        except:
+            LOGGER.exception("Exception making request")
+            raise
 
-    person = json.loads(result.content.decode('utf-8'))
-    coordinates = (person['desk']['location_x'], person['desk']['location_y'])
-    LOGGER.debug("Person=%s, x=%s, y=%s", person['first'], coordinates[0], coordinates[1])
+        person = json.loads(result.content.decode('utf-8'))
+        person_name = '{} {}'.format(person['first'], person['last'])
+        coordinates = (person['desk']['location_x'], person['desk']['location_y'])
 
-    message = ("Taking you to {} {}".format(person['first'], person['last']))
+    LOGGER.debug("Person=%s, x=%s, y=%s", coordinates[0], coordinates[1])
+
+    message = "Taking you to {}".format(person_name)
     speak(message)
 
     return coordinates
