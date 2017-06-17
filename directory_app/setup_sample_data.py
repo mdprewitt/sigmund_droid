@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 people = {
-    '1':
+    1:
         dict(
             first='Conference',
             last='Room A',
@@ -10,7 +10,7 @@ people = {
             location_y=50,
             floor=21,
         ),
-    '2':
+    2:
         dict(
             first='Jane',
             last='Smith',
@@ -20,7 +20,7 @@ people = {
             location_y=-20,
             floor=21,
         ),
-    '3':
+    3:
         dict(
             first='Your Private Client',
             last='Advisor',
@@ -30,7 +30,7 @@ people = {
             location_y=-20,
             floor=21,
         ),
-    '4':
+    4:
         dict(
             first='Jose',
             last='Chavez',
@@ -40,7 +40,7 @@ people = {
             location_y=-20,
             floor=21,
         ),
-    '5':
+    5:
         dict(
             first='Conswayla',
             last='Montoya',
@@ -50,7 +50,7 @@ people = {
             location_y=50,
             floor=21,
         ),
-    '6':
+    6:
         dict(
             first='Kurt',
             last='Vonnegut',
@@ -60,7 +60,7 @@ people = {
             location_y=-20,
             floor=21,
         ),
-    '7':
+    7:
         dict(
             first='Jane',
             last='Austin',

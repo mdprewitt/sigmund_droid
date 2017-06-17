@@ -47,7 +47,8 @@ def get_color(url="http://127.0.0.1:5000", fake_data=False):
     LOGGER.debug("looking for person with sid=%d", color)
 
     if fake_data:
-        person = people['sid']
+        LOGGER.debug("using mock data")
+        person = people[color]
         person_name = '{} {}'.format(person['first'], person['last'])
         coordinates = (person['location_x'], person['location_y'])
     else:
@@ -81,7 +82,7 @@ def get_color(url="http://127.0.0.1:5000", fake_data=False):
         person_name = '{} {}'.format(person['first'], person['last'])
         coordinates = (person['desk']['location_x'], person['desk']['location_y'])
 
-    LOGGER.debug("Person=%s, x=%s, y=%s", coordinates[0], coordinates[1])
+    LOGGER.debug("Person=%s, x=%s, y=%s", person_name, coordinates[0], coordinates[1])
 
     message = "Taking you to {}".format(person_name)
     speak(message)

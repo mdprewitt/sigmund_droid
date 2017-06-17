@@ -41,6 +41,17 @@ SCREEN = Screen()
 LEDS = Leds
 
 SILENT = False
+SP_FOR_90_DEG_TURN = 295
+
+
+def set_silent(silent=False):
+    global SILENT
+    SILENT = silent
+
+
+def set_90_sp(sps=295):
+    global SP_FOR_90_DEG_TURN
+    SP_FOR_90_DEG_TURN = sps
 
 
 def main():

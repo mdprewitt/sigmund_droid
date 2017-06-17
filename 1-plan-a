@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./sigmund_demo.py --fake_data
+./sigmund_demo.py --fake_data $*

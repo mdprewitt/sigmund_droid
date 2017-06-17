@@ -14,7 +14,10 @@ from navigation import *
 LOGGER = logging.getLogger(__name__)
 
 
-def main(url, fake_data):
+def main(url, turn_90_sp, fake_data=False, silent=False):
+    globals.set_silent(silent)
+    globals.set_90_sp(turn_90_sp)
+
     try:
         stop()
         initialize()
@@ -43,7 +46,8 @@ def main(url, fake_data):
                     raise
                 except ButtonAbort:
                     raise
-                except:
+                except Exception as ex:
+                    LOGGER.exception(ex)
                     pass
 
             moved_right = smart_move(x_target)
@@ -81,14 +85,14 @@ if __name__ == "__main__":
     parser.add_argument('--silent', action='store_true')
     parser.add_argument('--fake_data', action='store_true')
     parser.add_argument('--log_level', default='INFO')
-    parser.add_argument('--url', default='http://{host_ip}:5000'.format(host_ip=os.environ.get('SSH_IP')))
+    parser.add_argument('--turn90', default=globals.SP_FOR_90_DEG_TURN)
+    parser.add_argument('--url', default='http://{host_ip}:5000'.format(host_ip=os.environ.get('SSH_IP', '127.0.0.1')))
     args = parser.parse_args()
-
-    globals.SILENT = args.silent
 
     logging.basicConfig(
         format='%(asctime)-15s %(message)s',
         level=args.log_level,
     )
 
-    main(args.url, args.fake_data)
+    LOGGER.debug("args %s", args)
+    main(args.url, args.turn90, fake_data=args.fake_data, silent=args.silent)
