@@ -178,8 +178,8 @@ def turn_right():
 def turn_left():
     stop()
     LOGGER.debug("turning right %s", SP_FOR_90_DEG_TURN)
-    LEFT_MOTOR.run_to_rel_pos(position_sp=SP_FOR_90_DEG_TURN, speed_sp=360, stop_action="brake")
-    RIGHT_MOTOR.run_to_rel_pos(position_sp=-SP_FOR_90_DEG_TURN, speed_sp=360, stop_action="brake")
+    LEFT_MOTOR.run_to_rel_pos(position_sp=SP_FOR_90_DEG_TURN + 7, speed_sp=360, stop_action="brake")
+    RIGHT_MOTOR.run_to_rel_pos(position_sp=-SP_FOR_90_DEG_TURN - 7, speed_sp=360, stop_action="brake")
     # TODO change to while not running / check_abort / sleep
     LEFT_MOTOR.wait_while('running')
     stop()
@@ -223,7 +223,7 @@ def smart_move(centimeters):
         if ir_distance() < 20:
             stop()
             LOGGER.info("ran into something at %s", moved())
-            speak("Pardon me")
+            speak("Ah Pardon me")
             turn_right()
             move(15)
             moved_right += 15

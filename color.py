@@ -84,7 +84,7 @@ def get_color(url="http://127.0.0.1:5000", fake_data=False):
 
     LOGGER.debug("Person=%s, x=%s, y=%s", person_name, coordinates[0], coordinates[1])
 
-    message = "Taking you to {}".format(person_name)
+    message = "Ah Taking you to {}".format(person_name)
     speak(message)
 
     return coordinates

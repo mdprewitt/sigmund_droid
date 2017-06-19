@@ -21,7 +21,7 @@ def main(url, turn_90_sp, fake_data=False, silent=False):
     try:
         stop()
         initialize()
-        speak('Press the red button to start the demo.')
+        speak('Ah Press the red button to start the demo.')
     except:
         pass
 
@@ -35,7 +35,7 @@ def main(url, turn_90_sp, fake_data=False, silent=False):
             initialize()
 
             LEDS.set_color(LEDS.LEFT, LEDS.GREEN)
-            speak('Welcome to JP Morgan Chase. Who are you looking for?')
+            speak('Ah Welcome to JP Morgan Chase. How may I help you?')
             display_image('chase.png')
 
             x_target = None
@@ -62,7 +62,7 @@ def main(url, turn_90_sp, fake_data=False, silent=False):
 
             LOGGER.info("Reached destination")
             stop()
-            speak('Press the red button to return home.')
+            speak('Ah We have arrived. Press the red button to send me home.')
             wait_for_touch_sensor()
             turn_around()
 
