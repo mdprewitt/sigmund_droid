@@ -235,7 +235,7 @@ def smart_move(centimeters):
         start_pos = current_pos
         if remaining < 10:
             # slow down as we approach the destination so we don't overshoot
-            start(speed=int(LEFT_MOTOR.speed_sp * .5) + 10)
+            start(speed=int(LEFT_MOTOR.speed_sp * .6) + 50)
     LOGGER.debug("Remaining %s", remaining)
     return moved_right
 
